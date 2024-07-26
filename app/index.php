@@ -14,22 +14,22 @@
 
     <div class="container-fluid">
         <header class="row flex-wrap justify-content-between align-items-center p-3 mb-4 border-bottom">
-            <a href="index.html" class="col-1">
+            <a href="index.php" class="col-1">
                 <i class="bi bi-piggy-bank-fill text-primary fs-1"></i>
             </a>
             <nav class="col-11 col-md-7">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link link-secondary" aria-current="page">Opérations</a>
+                        <a href="index.php" class="nav-link link-secondary" aria-current="page">Opérations</a>
                     </li>
                     <li class="nav-item">
-                        <a href="summary.html" class="nav-link link-body-emphasis">Synthèses</a>
+                        <a href="summary.php" class="nav-link link-body-emphasis">Synthèses</a>
                     </li>
                     <li class="nav-item">
-                        <a href="categories.html" class="nav-link link-body-emphasis">Catégories</a>
+                        <a href="categories.php" class="nav-link link-body-emphasis">Catégories</a>
                     </li>
                     <li class="nav-item">
-                        <a href="import.html" class="nav-link link-body-emphasis">Importer</a>
+                        <a href="import.php" class="nav-link link-body-emphasis">Importer</a>
                     </li>
                 </ul>
             </nav>
@@ -214,13 +214,13 @@
                             <span class="page-link">Juillet 2023</span>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="index.html">Juin 2023</a>
+                            <a class="page-link" href="index.php">Juin 2023</a>
                         </li>
                         <li class="page-item">
                             <span class="page-link">...</span>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="index.html">
+                            <a class="page-link" href="index.php">
                                 <i class="bi bi-arrow-right"></i>
                             </a>
                         </li>
@@ -231,7 +231,7 @@
     </div>
 
     <div class="position-fixed bottom-0 end-0 m-3">
-        <a href="add.html" class="btn btn-primary btn-lg rounded-circle">
+        <a href="add.php" class="btn btn-primary btn-lg rounded-circle">
             <i class="bi bi-plus fs-1"></i>
         </a>
     </div>
@@ -239,7 +239,6 @@
     <footer class="py-3 mt-4 border-top">
         <p class="text-center text-body-secondary">© 2023 Mes comptes</p>
     </footer>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
