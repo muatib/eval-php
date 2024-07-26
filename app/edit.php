@@ -4,9 +4,9 @@ include 'functions.php';
 
 $pdo = connectDb();
 
-// Handle form submission
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate input
+   
     $id = intval($_POST['id']);
     $name = trim($_POST['name']);
     $amount = floatval($_POST['amount']);
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($name) || empty($amount) || empty($date)) {
         $error = "Veuillez remplir tous les champs.";
     } else {
-        // Update transaction in database
+       
         $sql = "UPDATE `transaction` SET name = :name, amount = :amount, date_transaction = :date, id_category = :category WHERE id_transaction = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'id' => $id,
     ]);
 
-        // Redirect back to index page
+       
         header('Location: index.php');
         exit;
     }

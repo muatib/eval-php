@@ -9,6 +9,7 @@ $pdo = connectDb();
 $month = isset($_GET['month']) ? intval($_GET['month']) : date('n'); 
 $year = isset($_GET['year']) ? intval($_GET['year']) : date('Y'); 
 
+
 if ($month < 1 || $month > 12) {
     $month = date('n');
 }
@@ -16,8 +17,8 @@ if ($year < 2000 || $year > date('Y')) {
     $year = date('Y');
 }
 
-if (isset($_GET['delete_id'])) { 
-    $idToDelete = intval($_GET['delete_id']); 
+if (isset($_GET['delete_id'])) {
+    $idToDelete = intval($_GET['delete_id']);
 
     $sql = "DELETE FROM `transaction` WHERE id_transaction = $idToDelete";
     $pdo->exec($sql);
@@ -26,14 +27,34 @@ if (isset($_GET['delete_id'])) {
     exit;
 }
 
+
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+
 $sql = "SELECT t.*, c.category_name, c.icon_class 
         FROM `transaction` t 
         LEFT JOIN `category` c ON t.id_category = c.id_category 
-        WHERE MONTH(t.date_transaction) = $month 
-        AND YEAR(t.date_transaction) = $year 
-        ORDER BY t.date_transaction DESC";
+        WHERE 1=1 "; 
 
-$stmt = $pdo->query($sql);
+if (!empty($search)) {
+    $sql .= "AND t.name LIKE :search "; 
+}
+
+$sql .= "AND MONTH(t.date_transaction) = :month 
+         AND YEAR(t.date_transaction) = :year 
+         ORDER BY t.date_transaction DESC";
+
+$stmt = $pdo->prepare($sql);
+
+if (!empty($search)) {
+    $searchParam = '%' . $search . '%'; 
+    $stmt->bindParam(':search', $searchParam);
+}
+
+$stmt->bindParam(':month', $month, PDO::PARAM_INT);
+$stmt->bindParam(':year', $year, PDO::PARAM_INT);
+
+$stmt->execute();
 $transactions = $stmt->fetchAll();
 
 $balance = 0;
@@ -95,8 +116,8 @@ $pageTitle = "Mes comptes"
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <a href="index.php?month=<?php echo $month; ?>&year=<?php echo $year; ?>&delete_id=<?php echo $transaction['id_transaction']; ?>" class="btn btn-outline-danger btn-sm rounded-circle" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette opération ?');">
-    <i class="bi bi-trash"></i>
-</a>
+                                    <i class="bi bi-trash"></i>
+                                </a>
 
                             </td>
                         </tr>
@@ -105,20 +126,20 @@ $pageTitle = "Mes comptes"
             </table>
         </div>
         <div class="card-footer">
-            <nav class="text-center">
-                <ul class="pagination d-flex justify-content-center m-2">
-                    <li class="page-item <?php echo ($month == 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?month=<?php echo $month - 1; ?>&year=<?php echo ($month == 1) ? $year - 1 : $year; ?>">Mois précédent</a>
-                    </li>
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link"><?php echo $moisFrancais[$month] . ' ' . $year; ?></span>
-                    </li>
-                    <li class="page-item <?php echo ($month == 12) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?month=<?php echo $month + 1; ?>&year=<?php echo ($month == 12) ? $year + 1 : $year; ?>">Mois suivant</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+    <nav class="text-center">
+        <ul class="pagination d-flex justify-content-center m-2">
+            <li class="page-item <?php echo ($month == 1) ? 'disabled' : ''; ?>">
+                <a class="page-link" href="?month=<?php echo $month - 1; ?>&year=<?php echo ($month == 1) ? $year - 1 : $year; ?>">Previous Month</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <span class="page-link"><?php echo date('F Y', mktime(0, 0, 0, $month, 1, $year)); ?></span>
+            </li>
+            <li class="page-item <?php echo ($month == 12) ? 'disabled' : ''; ?>">
+                <a class="page-link" href="?month=<?php echo $month + 1; ?>&year=<?php echo ($month == 12) ? $year + 1 : $year; ?>">Next Month</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
     </section>
 </div>

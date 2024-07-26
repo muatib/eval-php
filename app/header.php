@@ -34,14 +34,19 @@
                     <li class="nav-item">
                         <a href="import.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'import.php') ? 'link-secondary' : 'link-body-emphasis'; ?>">Importer</a>
                     </li>
+                    <li class="nav-item">
+    <a href="categories.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'categories.php') ? 'link-secondary' : 'link-body-emphasis'; ?>">Catégories</a>
+</li>
                 </ul>
             </nav>
-            <form action="" class="col-12 col-md-4" role="search">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Rechercher..." aria-describedby="button-search">
-                    <button class="btn btn-primary" type="submit" id="button-search">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </form>
+            <form action="index.php" method="get" class="col-12 col-md-4" role="search">
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="Rechercher..." 
+               value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+        <button class="btn btn-primary" type="submit" id="button-search">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
+</form>
+
         </header>
