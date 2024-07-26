@@ -1,3 +1,21 @@
+<?php
+
+include 'functions.php';
+
+$pdo = connectDb();
+
+$sql = "SELECT t.*, c.category_name, c.icon_class FROM `transaction` t LEFT JOIN `category` c ON t.id_category = c.id_category WHERE MONTH(t.date_transaction) = MONTH(CURRENT_DATE()) AND YEAR(t.date_transaction) = YEAR(CURRENT_DATE()) ORDER BY t.date_transaction DESC";
+
+$stmt = $pdo->query($sql);
+$transactions = $stmt->fetchAll();
+
+
+$balance = 0;
+foreach ($transactions as $transaction) {
+    $balance += $transaction['amount'];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -11,7 +29,7 @@
 </head>
 
 <body>
-
+   
     <div class="container-fluid">
         <header class="row flex-wrap justify-content-between align-items-center p-3 mb-4 border-bottom">
             <a href="index.php" class="col-1">
@@ -35,8 +53,7 @@
             </nav>
             <form action="" class="col-12 col-md-4" role="search">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Rechercher..."
-                        aria-describedby="button-search">
+                    <input type="text" class="form-control" placeholder="Rechercher..." aria-describedby="button-search">
                     <button class="btn btn-primary" type="submit" id="button-search">
                         <i class="bi bi-search"></i>
                     </button>
@@ -46,162 +63,60 @@
     </div>
 
     <div class="container">
+       
+        
         <section class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-                <h2 class="my-0 fw-normal fs-4">Solde aujourd'hui</h2>
-            </div>
-            <div class="card-body">
-                <p class="card-title pricing-card-title text-center fs-1">625,34 €</p>
-            </div>
-        </section>
+    <div class="card-header py-3">
+        <h2 class="my-0 fw-normal fs-4">Solde actuel</h2>
+    </div>
+    <div class="card-body">
+        <p class="card-title pricing-card-title text-center fs-1"><?php echo number_format($balance, 2); ?> €</p>
+    </div>
+</section>
 
         <section class="card mb-4 rounded-3 shadow-sm">
             <div class="card-header py-3">
                 <h1 class="my-0 fw-normal fs-4">Opérations de Juillet 2023</h1>
             </div>
             <div class="card-body">
-                <table class="table table-striped table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th scope="col" colspan="2">Opération</th>
-                            <th scope="col" class="text-end">Montant</th>
-                            <th scope="col" class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td width="50" class="ps-3">
-                            </td>
-                            <td>
-                                <time datetime="2023-07-10" class="d-block fst-italic fw-light">10/07/2023</time>
-                                Bar
-                            </td>
-                            <td class="text-end">
-                                <span class="rounded-pill text-nowrap bg-warning-subtle px-2">
-                                    - 32,00 €
-                                </span>
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="50" class="ps-3">
-                                <i class="bi bi-car-front fs-3"></i>
-                            </td>
-                            <td>
-                                <time datetime="2023-07-10" class="d-block fst-italic fw-light">10/07/2023</time>
-                                Essence voiture
-                            </td>
-                            <td class="text-end">
-                                <span class="rounded-pill text-nowrap bg-warning-subtle px-2">
-                                    - 94,00 €
-                                </span>
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="50" class="ps-3">
-                            </td>
-                            <td>
-                                <time datetime="2023-07-08" class="d-block fst-italic fw-light">8/07/2023</time>
-                                Facture électricité
-                            </td>
-                            <td class="text-end">
-                                <span class="rounded-pill text-nowrap bg-warning-subtle px-2">
-                                    - 83,00 €
-                                </span>
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="50" class="ps-3">
-                                <i class="bi bi-house-door fs-3"></i>
-                            </td>
-                            <td>
-                                <time datetime="2023-07-05" class="d-block fst-italic fw-light">5/07/2023</time>
-                                Loyer de Juillet 2023
-                            </td>
-                            <td class="text-end">
-                                <span class="rounded-pill text-nowrap bg-warning-subtle px-2">
-                                    - 432,00 €
-                                </span>
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="50" class="ps-3">
-                                <i class="bi bi-train-front fs-3"></i>
-                            </td>
-                            <td>
-                                <time datetime="2023-07-02" class="d-block fst-italic fw-light">2/07/2023</time>
-                                Billets de train Lille
-                            </td>
-                            <td class="text-end">
-                                <span class="rounded-pill text-nowrap bg-warning-subtle px-2">
-                                    - 89,00 €
-                                </span>
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="50" class="ps-3">
-                                <i class="bi bi-bandaid fs-3"></i>
-                            </td>
-                            <td>
-                                <time datetime="2023-07-02" class="d-block fst-italic fw-light">2/07/2023</time>
-                                Reboursement sécurité sociale
-                            </td>
-                            <td class="text-end">
-                                <span class="rounded-pill text-nowrap bg-success-subtle px-2">
-                                    + 48,00 €
-                                </span>
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th scope="col" colspan="2">Opération</th>
+                <th scope="col" class="text-end">Montant</th>
+                <th scope="col" class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($transactions as $transaction): ?>
+                <tr>
+                    <td width="50" class="ps-3">
+                        <?php if (!empty($transaction['icon_class'])): ?>
+                            <i class="<?php echo $transaction['icon_class']; ?> fs-3"></i>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <time datetime="<?php echo $transaction['date_transaction']; ?>" class="d-block fst-italic fw-light"><?php echo date('d/m/Y', strtotime($transaction['date_transaction'])); ?></time>
+                        <?php echo $transaction['name']; ?>
+                    </td>
+                    <td class="text-end">
+                        <span class="rounded-pill text-nowrap <?php echo ($transaction['amount'] >= 0) ? 'bg-success-subtle' : 'bg-warning-subtle'; ?> px-2">
+                            <?php echo number_format($transaction['amount'], 2); ?> €
+                        </span>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a href="#" class="btn btn-outline-primary btn-sm rounded-circle">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger btn-sm rounded-circle">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
             <div class="card-footer">
                 <nav class="text-center">
                     <ul class="pagination d-flex justify-content-center m-2">

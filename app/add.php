@@ -1,3 +1,37 @@
+<?php
+
+include 'functions.php';
+
+$pdo = connectDb();
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validate input
+    $name = trim($_POST['name']);
+    $amount = floatval($_POST['amount']);
+    $date = $_POST['date'];
+    $category = $_POST['category'];
+
+    if (empty($name) || empty($amount) || empty($date)) {
+        $error = "Veuillez remplir tous les champs.";
+    } else {
+        // Insert new transaction into database
+        $sql = "INSERT INTO `transaction` (name, amount, date_transaction, id_category) VALUES (:name, :amount, :date, :category)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'name' => $name,
+            'amount' => $amount,
+            'date' => $date,
+            'category' => $category,
+        ]);
+
+        // Redirect back to index page
+        header('Location: index.php');
+        exit;
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -45,13 +79,17 @@
         </header>
     </div>
 
-    <div class="container">
+    div class="container">
         <section class="card mb-4 rounded-3 shadow-sm">
             <div class="card-header py-3">
                 <h1 class="my-0 fw-normal fs-4">Ajouter une opération</h1>
             </div>
             <div class="card-body">
-                <form>
+                <?php if (isset($error)): ?>
+                    <div class="alert alert-danger"><?php echo $error; ?></div>
+                <?php endif; ?>
+
+                <form method="post">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nom de l'opération *</label>
                         <input type="text" class="form-control" name="name" id="name"
@@ -87,6 +125,8 @@
                     </div>
                 </form>
             </div>
+        </section>
+    </div>
         </section>
     </div>
 
